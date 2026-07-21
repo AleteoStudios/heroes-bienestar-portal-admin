@@ -105,6 +105,58 @@
             </div>
         </section>
 
+        <section class="measurement-card hidden" id="measurementCard">
+    <h2>Registrar nueva medición</h2>
+
+    <div class="measurement-grid">
+        <div>
+            <label for="inputNuevaEdad">Edad</label>
+            <input 
+                type="number" 
+                id="inputNuevaEdad" 
+                placeholder="Ejemplo: 9"
+            >
+        </div>
+
+        <div>
+            <label for="inputNuevaTalla">Talla en cm</label>
+            <input 
+                type="number" 
+                step="0.1" 
+                id="inputNuevaTalla" 
+                placeholder="Ejemplo: 136"
+            >
+        </div>
+
+        <div>
+            <label for="inputNuevoPeso">Peso en kg</label>
+            <input 
+                type="number" 
+                step="0.1" 
+                id="inputNuevoPeso" 
+                placeholder="Ejemplo: 33.5"
+            >
+        </div>
+
+        <div>
+            <label for="inputRegistradoPor">Registrado por</label>
+            <input 
+                type="text" 
+                id="inputRegistradoPor" 
+                placeholder="Nombre del docente o personal de salud"
+            >
+        </div>
+    </div>
+
+    <button id="btnGuardarMedicion" class="secondary-button">
+        Guardar nueva medición
+    </button>
+
+    <p id="measurementStatus" class="status-text">
+        Esperando perfil seleccionado...
+    </p>
+</section>
+
     </main>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="app.js"></script>

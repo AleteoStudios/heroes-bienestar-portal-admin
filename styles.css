@@ -16,7 +16,8 @@ body {
 
 .hero-card,
 .profile-card,
-.history-card {
+.history-card,
+.measurement-card {
     background: white;
     border-radius: 22px;
     padding: 28px;
@@ -140,4 +141,25 @@ button:hover {
 .error-text {
     color: #dc2626;
     font-weight: 700;
+}
+
+.measurement-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.measurement-grid label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.secondary-button {
+    background: #16a34a;
+}
+
+.secondary-button:hover {
+    background: #15803d;
 }
