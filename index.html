@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Administrador | Héroes del Bienestar</title>
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <main class="app-container">
+
+        <section class="hero-card">
+            <div class="brand-badge">Héroes del Bienestar</div>
+
+            <h1>Portal Administrador</h1>
+
+            <p class="subtitle">
+                Consulta segura de perfiles y seguimiento de mediciones.
+            </p>
+
+            <div class="qr-section">
+                <label for="qrCodeInput">Código QR del perfil</label>
+
+                <div class="input-row">
+                    <input 
+                        type="text" 
+                        id="qrCodeInput" 
+                        placeholder="Ejemplo: HB-A8F92K3D"
+                    >
+
+                    <button id="btnBuscar">
+                        Buscar perfil
+                    </button>
+                </div>
+
+                <p id="urlStatus" class="status-text">
+                    Esperando código QR...
+                </p>
+            </div>
+        </section>
+
+        <section class="profile-card hidden" id="profileCard">
+            <h2>Perfil encontrado</h2>
+
+            <div class="profile-grid">
+                <div>
+                    <span>Nombre</span>
+                    <strong id="txtNombre">---</strong>
+                </div>
+
+                <div>
+                    <span>Edad</span>
+                    <strong id="txtEdad">---</strong>
+                </div>
+
+                <div>
+                    <span>Sexo</span>
+                    <strong id="txtSexo">---</strong>
+                </div>
+
+                <div>
+                    <span>Escuela</span>
+                    <strong id="txtEscuela">---</strong>
+                </div>
+
+                <div>
+                    <span>CCT</span>
+                    <strong id="txtCCT">---</strong>
+                </div>
+
+                <div>
+                    <span>Grupo</span>
+                    <strong id="txtGrupo">---</strong>
+                </div>
+
+                <div>
+                    <span>Talla actual</span>
+                    <strong id="txtTalla">---</strong>
+                </div>
+
+                <div>
+                    <span>Peso actual</span>
+                    <strong id="txtPeso">---</strong>
+                </div>
+
+                <div>
+                    <span>IMC actual</span>
+                    <strong id="txtIMC">---</strong>
+                </div>
+
+                <div>
+                    <span>Categoría</span>
+                    <strong id="txtCategoria">---</strong>
+                </div>
+            </div>
+        </section>
+
+        <section class="history-card hidden" id="historyCard">
+            <h2>Historial de mediciones</h2>
+
+            <div id="historyList" class="history-list">
+                No hay mediciones registradas.
+            </div>
+        </section>
+
+    </main>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="app.js"></script>
+</body>
+</html>
