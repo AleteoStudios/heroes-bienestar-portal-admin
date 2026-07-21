@@ -18,6 +18,7 @@ const inputNuevaEdad = document.getElementById("inputNuevaEdad");
 const inputNuevaTalla = document.getElementById("inputNuevaTalla");
 const inputNuevoPeso = document.getElementById("inputNuevoPeso");
 const inputRegistradoPor = document.getElementById("inputRegistradoPor");
+const inputObservaciones = document.getElementById("inputObservaciones");
 
 let perfilActual = null;
 
@@ -115,6 +116,7 @@ function mostrarHistorial(registros) {
                 <p>IMC: ${formatoNumero(record.imc_medicion, 2, "")}</p>
                 <p>Categoría: ${record.categoria_medicion || "---"}</p>
                 <p>Registrado por: ${record.registrado_por || "---"}</p>
+                <p>Observaciones: ${record.observaciones || "---"}</p>
             </div>
         `;
     }).join("");
@@ -170,6 +172,7 @@ async function guardarNuevaMedicion() {
     const tallaCm = Number(inputNuevaTalla.value);
     const pesoKg = Number(inputNuevoPeso.value);
     const registradoPor = inputRegistradoPor.value.trim() || "Administrador portal";
+    const observaciones = inputObservaciones.value.trim();
 
     if (!edad || !tallaCm || !pesoKg) {
         measurementStatus.textContent = "Completa edad, talla y peso.";
@@ -207,14 +210,15 @@ async function guardarNuevaMedicion() {
     measurementStatus.textContent = "Guardando medición...";
 
     const nuevaMedicion = {
-        profile_id: perfilActual.profile_id,
-        edad: edad,
-        sexo: perfilActual.sexo,
-        talla_cm: Number(tallaCm.toFixed(2)),
-        peso_kg: Number(pesoKg.toFixed(2)),
-        imc: Number(imc.toFixed(2)),
-        categoria_imc: categoria,
-        registrado_por: registradoPor
+    profile_id: perfilActual.profile_id,
+    edad: edad,
+    sexo: perfilActual.sexo,
+    talla_cm: Number(tallaCm.toFixed(2)),
+    peso_kg: Number(pesoKg.toFixed(2)),
+    imc: Number(imc.toFixed(2)),
+    categoria_imc: categoria,
+    registrado_por: registradoPor,
+    observaciones: observaciones
     };
 
     const { error: errorMedicion } = await supabaseClient
@@ -250,6 +254,7 @@ async function guardarNuevaMedicion() {
 
     measurementStatus.classList.remove("error-text");
     measurementStatus.textContent = "Medición guardada correctamente.";
+    inputObservaciones.value = "";
 
     await buscarPerfilHistorial(perfilActual.qr_code);
 }
