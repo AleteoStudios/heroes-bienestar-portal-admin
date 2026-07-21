@@ -133,6 +133,32 @@ function llenarFormularioMedicion(perfil) {
     measurementStatus.classList.remove("error-text");
 }
 
+function obtenerUltimaMedicion() {
+    if (!perfilActual) {
+        return null;
+    }
+
+    return {
+        edad: Number(perfilActual.edad_actual),
+        tallaCm: Number(perfilActual.talla_actual_cm),
+        pesoKg: Number(perfilActual.peso_actual_kg)
+    };
+}
+
+function esMedicionDuplicada(edad, tallaCm, pesoKg) {
+    const ultima = obtenerUltimaMedicion();
+
+    if (!ultima) {
+        return false;
+    }
+
+    const mismaEdad = ultima.edad === edad;
+    const mismaTalla = Math.abs(ultima.tallaCm - tallaCm) < 0.01;
+    const mismoPeso = Math.abs(ultima.pesoKg - pesoKg) < 0.01;
+
+    return mismaEdad && mismaTalla && mismoPeso;
+}
+
 async function guardarNuevaMedicion() {
     if (!perfilActual) {
         measurementStatus.textContent = "Primero busca un perfil por QR.";
@@ -169,6 +195,11 @@ async function guardarNuevaMedicion() {
         return;
     }
 
+    if (esMedicionDuplicada(edad, tallaCm, pesoKg)) {
+    measurementStatus.textContent = "No hubo cambios en edad, talla o peso. No se guardó una nueva medición.";
+    measurementStatus.classList.add("error-text");
+    return;
+    }
     const imc = calcularIMC(tallaCm, pesoKg);
     const categoria = clasificarIMCProvisional(imc);
 
