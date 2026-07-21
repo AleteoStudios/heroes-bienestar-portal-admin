@@ -8,6 +8,7 @@ const btnBuscar = document.getElementById("btnBuscar");
 const urlStatus = document.getElementById("urlStatus");
 
 const profileCard = document.getElementById("profileCard");
+const summaryCard = document.getElementById("summaryCard");
 const historyCard = document.getElementById("historyCard");
 const measurementCard = document.getElementById("measurementCard");
 
@@ -72,6 +73,7 @@ async function buscarPerfilHistorial(qrCode) {
     mostrarEstado(`Perfil encontrado: ${qrCode}`);
 
     mostrarPerfil(data[0]);
+    mostrarResumenEvolucion(data);
     mostrarHistorial(data);
 }
 
@@ -278,6 +280,7 @@ function clasificarIMCProvisional(imc) {
 
 function ocultarResultados() {
     profileCard.classList.add("hidden");
+    summaryCard.classList.add("hidden");
     historyCard.classList.add("hidden");
     measurementCard.classList.add("hidden");
 
@@ -294,6 +297,22 @@ function ocultarResultados() {
 function mostrarEstado(mensaje, esError = false) {
     urlStatus.textContent = mensaje;
     urlStatus.classList.toggle("error-text", esError);
+}
+
+function formatoCambio(valor, decimales, unidad) {
+    if (valor === null || valor === undefined || Number.isNaN(Number(valor))) {
+        return "---";
+    }
+
+    const numero = Number(valor);
+
+    if (Math.abs(numero) < 0.01) {
+        return `Sin cambio ${unidad}`.trim();
+    }
+
+    const signo = numero > 0 ? "+" : "";
+
+    return `${signo}${numero.toFixed(decimales)} ${unidad}`.trim();
 }
 
 function formatoNumero(valor, decimales, unidad) {
@@ -328,3 +347,40 @@ function formatoFecha(fecha) {
 }
 
 leerCodigoDesdeURL();
+
+function mostrarResumenEvolucion(registros) {
+    summaryCard.classList.remove("hidden");
+
+    if (!registros || registros.length === 0) {
+        document.getElementById("txtTotalMediciones").textContent = "0";
+        document.getElementById("txtUltimaMedicion").textContent = "---";
+        document.getElementById("txtCambioTalla").textContent = "---";
+        document.getElementById("txtCambioPeso").textContent = "---";
+        document.getElementById("txtCambioIMC").textContent = "---";
+        return;
+    }
+
+    const registrosValidos = registros.filter(r => r.health_record_id);
+
+    if (registrosValidos.length === 0) {
+        document.getElementById("txtTotalMediciones").textContent = "0";
+        document.getElementById("txtUltimaMedicion").textContent = "---";
+        document.getElementById("txtCambioTalla").textContent = "---";
+        document.getElementById("txtCambioPeso").textContent = "---";
+        document.getElementById("txtCambioIMC").textContent = "---";
+        return;
+    }
+
+    const ultima = registrosValidos[0];
+    const primera = registrosValidos[registrosValidos.length - 1];
+
+    const cambioTalla = Number(ultima.talla_medicion_cm) - Number(primera.talla_medicion_cm);
+    const cambioPeso = Number(ultima.peso_medicion_kg) - Number(primera.peso_medicion_kg);
+    const cambioIMC = Number(ultima.imc_medicion) - Number(primera.imc_medicion);
+
+    document.getElementById("txtTotalMediciones").textContent = registrosValidos.length;
+    document.getElementById("txtUltimaMedicion").textContent = formatoFecha(ultima.fecha_medicion);
+    document.getElementById("txtCambioTalla").textContent = formatoCambio(cambioTalla, 1, "cm");
+    document.getElementById("txtCambioPeso").textContent = formatoCambio(cambioPeso, 1, "kg");
+    document.getElementById("txtCambioIMC").textContent = formatoCambio(cambioIMC, 2, "");
+}
