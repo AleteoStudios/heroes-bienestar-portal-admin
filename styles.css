@@ -219,3 +219,23 @@ textarea {
 .logout-button:hover {
     background: #475569;
 }
+
+.admin-session-box {
+    border: 1px solid #bae6fd;
+    background: #f0f9ff;
+    border-radius: 16px;
+    padding: 14px 16px;
+    margin-bottom: 16px;
+}
+
+.admin-session-box span {
+    display: block;
+    color: #0369a1;
+    font-size: 14px;
+    margin-bottom: 4px;
+}
+
+.admin-session-box strong {
+    color: #0f172a;
+    font-size: 16px;
+}
