@@ -239,3 +239,42 @@ textarea {
     color: #0f172a;
     font-size: 16px;
 }
+
+.profile-card h2,
+.summary-card h2,
+.history-card h2,
+.measurement-card h2 {
+    margin-top: 8px;
+    margin-bottom: 24px;
+}
+
+.summary-card {
+    margin-top: 28px;
+}
+
+.history-card {
+    margin-top: 34px;
+}
+
+.measurement-card {
+    margin-top: 34px;
+}
+
+.summary-grid {
+    margin-top: 12px;
+}
+
+.history-list,
+#historyList {
+    margin-top: 16px;
+}
+
+.summary-card h2 {
+    margin-top: 12px;
+    margin-bottom: 24px;
+}
+
+.history-card h2 {
+    margin-top: 12px;
+    margin-bottom: 24px;
+}
