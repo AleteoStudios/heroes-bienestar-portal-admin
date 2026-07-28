@@ -223,11 +223,22 @@ async function buscarPerfilHistorial(qrCode) {
     qrCodeInput.value = qrCode;
     ocultarResultados();
 
-    const { data, error } = await supabaseClient
-        .from("vw_profile_health_history")
-        .select("*")
-        .eq("qr_code", qrCode)
-        .order("fecha_medicion", { ascending: false });
+    let consulta = supabaseClient
+    .from("vw_profile_health_history")
+    .select("*")
+    .eq("qr_code", qrCode)
+    .order("fecha_medicion", { ascending: false });
+
+if (adminActual.rol !== "admin") {
+    if (!adminActual.cct) {
+        mostrarEstado("Tu usuario no tiene CCT asignado. No puede consultar perfiles.", true);
+        return;
+    }
+
+    consulta = consulta.eq("cct", adminActual.cct);
+}
+
+const { data, error } = await consulta;
 
     if (error) {
         console.error(error);
@@ -235,10 +246,14 @@ async function buscarPerfilHistorial(qrCode) {
         return;
     }
 
-    if (!data || data.length === 0) {
+   if (!data || data.length === 0) {
+    if (adminActual.rol !== "admin") {
+        mostrarEstado("No se encontró el perfil o no pertenece a tu CCT asignado.", true);
+    } else {
         mostrarEstado("No se encontró ningún perfil con ese código QR.", true);
-        return;
     }
+    return;
+}
 
     mostrarEstado(`Perfil encontrado: ${qrCode}`);
 
@@ -405,6 +420,14 @@ async function guardarNuevaMedicion() {
         measurementStatus.classList.add("error-text");
         return;
     }
+
+    if (adminActual.rol !== "admin") {
+    if (!adminActual.cct || perfilActual.cct !== adminActual.cct) {
+        measurementStatus.textContent = "No puedes registrar mediciones de un perfil fuera de tu CCT asignado.";
+        measurementStatus.classList.add("error-text");
+        return;
+    }
+}
 
     const edad = Number(inputNuevaEdad.value);
     const tallaCm = Number(inputNuevaTalla.value);
