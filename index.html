@@ -10,8 +10,45 @@
 <body>
 
     <main class="app-container">
+        <section class="login-card" id="loginCard">
+    <div class="brand-badge">Héroes del Bienestar</div>
 
-        <section class="hero-card">
+    <h1>Acceso administrador</h1>
+
+    <p class="subtitle">
+        Inicia sesión para consultar perfiles y registrar mediciones.
+    </p>
+
+    <div class="login-grid">
+        <div>
+            <label for="inputEmail">Correo electrónico</label>
+            <input 
+                type="email" 
+                id="inputEmail" 
+                placeholder="admin@heroesbienestar.com"
+            >
+        </div>
+
+        <div>
+            <label for="inputPassword">Contraseña</label>
+            <input 
+                type="password" 
+                id="inputPassword" 
+                placeholder="Contraseña"
+            >
+        </div>
+    </div>
+
+    <button id="btnLogin">
+        Iniciar sesión
+    </button>
+
+    <p id="loginStatus" class="status-text">
+        Esperando credenciales...
+    </p>
+</section>
+
+        <section class="hero-card hidden" id="portalCard">
             <div class="brand-badge">Héroes del Bienestar</div>
 
             <h1>Portal Administrador</h1>
@@ -19,6 +56,10 @@
             <p class="subtitle">
                 Consulta segura de perfiles y seguimiento de mediciones.
             </p>
+
+            <button id="btnLogout" class="logout-button">
+    Cerrar sesión
+</button>
 
             <div class="qr-section">
                 <label for="qrCodeInput">Código QR del perfil</label>

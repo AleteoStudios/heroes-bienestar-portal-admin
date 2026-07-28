@@ -3,6 +3,15 @@ const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBh
 
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+const loginCard = document.getElementById("loginCard");
+const portalCard = document.getElementById("portalCard");
+
+const inputEmail = document.getElementById("inputEmail");
+const inputPassword = document.getElementById("inputPassword");
+const btnLogin = document.getElementById("btnLogin");
+const btnLogout = document.getElementById("btnLogout");
+const loginStatus = document.getElementById("loginStatus");
+
 const qrCodeInput = document.getElementById("qrCodeInput");
 const btnBuscar = document.getElementById("btnBuscar");
 const urlStatus = document.getElementById("urlStatus");
@@ -22,6 +31,9 @@ const inputRegistradoPor = document.getElementById("inputRegistradoPor");
 const inputObservaciones = document.getElementById("inputObservaciones");
 
 let perfilActual = null;
+
+btnLogin.addEventListener("click", iniciarSesion);
+btnLogout.addEventListener("click", cerrarSesion);
 
 btnBuscar.addEventListener("click", () => {
     const qrCode = qrCodeInput.value.trim().toUpperCase();
@@ -50,6 +62,15 @@ function leerCodigoDesdeURL() {
 }
 
 async function buscarPerfilHistorial(qrCode) {
+
+    const { data: sessionData } = await supabaseClient.auth.getSession();
+
+if (!sessionData.session) {
+    mostrarEstado("Debes iniciar sesión para consultar perfiles.", true);
+    mostrarLogin();
+    return;
+}
+
     mostrarEstado(`Buscando perfil con código: ${qrCode}...`);
     ocultarResultados();
 
@@ -389,4 +410,70 @@ function mostrarResumenEvolucion(registros) {
     document.getElementById("txtCambioTalla").textContent = formatoCambio(cambioTalla, 1, "cm");
     document.getElementById("txtCambioPeso").textContent = formatoCambio(cambioPeso, 1, "kg");
     document.getElementById("txtCambioIMC").textContent = formatoCambio(cambioIMC, 2, "");
+}
+
+async function revisarSesionActiva() {
+    const { data } = await supabaseClient.auth.getSession();
+
+    if (data.session) {
+        mostrarPortal();
+    } else {
+        mostrarLogin();
+    }
+}
+
+async function iniciarSesion() {
+    const email = inputEmail.value.trim();
+    const password = inputPassword.value.trim();
+
+    if (!email || !password) {
+        mostrarLoginStatus("Ingresa correo y contraseña.", true);
+        return;
+    }
+
+    mostrarLoginStatus("Iniciando sesión...");
+
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
+        email,
+        password
+    });
+
+    if (error) {
+        console.error(error);
+        mostrarLoginStatus("No se pudo iniciar sesión. Verifica tus datos.", true);
+        return;
+    }
+
+    mostrarLoginStatus("Sesión iniciada correctamente.");
+    mostrarPortal();
+
+   revisarSesionActiva();
+}
+
+async function cerrarSesion() {
+    await supabaseClient.auth.signOut();
+
+    inputPassword.value = "";
+    mostrarLoginStatus("Sesión cerrada.");
+    mostrarLogin();
+    ocultarResultados();
+}
+
+function mostrarLogin() {
+    loginCard.classList.remove("hidden");
+    portalCard.classList.add("hidden");
+    profileCard.classList.add("hidden");
+    summaryCard.classList.add("hidden");
+    historyCard.classList.add("hidden");
+    measurementCard.classList.add("hidden");
+}
+
+function mostrarPortal() {
+    loginCard.classList.add("hidden");
+    portalCard.classList.remove("hidden");
+}
+
+function mostrarLoginStatus(mensaje, esError = false) {
+    loginStatus.textContent = mensaje;
+    loginStatus.classList.toggle("error-text", esError);
 }

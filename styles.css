@@ -14,6 +14,7 @@ body {
     margin: 40px auto;
 }
 
+.login-card,
 .hero-card,
 .profile-card,
 .summary-card,
@@ -195,4 +196,26 @@ textarea {
 
 .summary-grid strong {
     font-size: 18px;
+}
+
+.login-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.login-grid label {
+    display: block;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.logout-button {
+    background: #64748b;
+    margin-bottom: 20px;
+}
+
+.logout-button:hover {
+    background: #475569;
 }
