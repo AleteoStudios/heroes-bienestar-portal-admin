@@ -305,14 +305,20 @@ function formatoCambio(valor, decimales, unidad) {
     }
 
     const numero = Number(valor);
+    const unidadTexto = unidad ? ` ${unidad}` : "";
 
     if (Math.abs(numero) < 0.01) {
-        return `Sin cambio ${unidad}`.trim();
+        return "Sin cambio — Estable";
     }
 
     const signo = numero > 0 ? "+" : "";
+    const textoCambio = `${signo}${numero.toFixed(decimales)}${unidadTexto}`;
 
-    return `${signo}${numero.toFixed(decimales)} ${unidad}`.trim();
+    if (numero > 0) {
+        return `${textoCambio} — Aumento registrado`;
+    }
+
+    return `${textoCambio} — Disminución registrada`;
 }
 
 function formatoNumero(valor, decimales, unidad) {
